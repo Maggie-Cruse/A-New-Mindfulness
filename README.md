@@ -1,7 +1,7 @@
 # animated-octo-fiesta
 Aesthetics and Computation final project repository for group 2
 
-Wokring title: Zoom with Zen
+Working title: Zoom with Zen
 
 The concept of our project revolves around how someone centering themselves may aid them both literally and figuratively. How our project will work is that when a user’s face is detected then a rectangle overlays it. We decided we wanted to sonify the position of the rectangle on screen (AKA the position and movement of the user’s face). If their face is centered on the screen, then the sound will be a soft, low tone. As their face gets closer to the edges of the screen, then the sound becomes higher, as if in warning (and in urge of the user to return to the center). 
 
