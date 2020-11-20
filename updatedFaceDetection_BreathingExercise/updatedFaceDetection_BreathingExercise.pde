@@ -2,8 +2,16 @@ import processing.video.Capture;
 import gab.opencv.OpenCV;
 import java.awt.Rectangle;
 
+import netP5.*;
+import oscP5.*;
+
 Capture cam;
 OpenCV opencv;
+
+//Osc
+OscP5 osc;
+NetAddress supercollider;
+
 
 // input resolution
 int w = 320, h = 240;
@@ -68,6 +76,10 @@ void draw() {
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+    OscMessage myOsc = new OscMessage("/move");
+    myOsc.add(faces[i].x);
+    myOsc.add(faces[i].y);
+    osc.send(myOsc,supercollider);
   }
 
   // show performance and number of detected faces on the console
