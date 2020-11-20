@@ -19,21 +19,36 @@ int w = 320, h = 240;
 // output zoom
 int zoom = 3;
 
-
+//meditation mode (many 'techno' faces)
 int numSides = 9;
 int numLayers = 10;
 PVector[][] pts;
 float breathe = .5;
 
+//meditation mode button (fewer 'techno' faces)
+int numSides2 = 9;
+int numLayers2 = 3;
+PVector[][] pts2;
+float breathe2 = .5;
+
+//class button
+Button b1; //meditation mode
+
+// 2 integrated screen 'places'
+int currentScreen;
+int screen1;
 
 void setup() {
   //size(600, 600);
-    size(960, 720);
-    //size(640, 480);
+  size(960, 720);
+  //size(640, 480);
   background(0);
   
+  osc = new OscP5(this,12000);
+  supercollider = new NetAddress("127.0.0.1", 57120);
   
-    cam = new Capture(this, w, h);
+  
+  cam = new Capture(this, w, h);
   cam.start();
 
   // init OpenCV with input resolution
@@ -51,15 +66,55 @@ void setup() {
   strokeWeight(2);
   strokeJoin(ROUND);
 
+ //meditation mode
   computePts(numSides, numLayers);
+  //mediation mode button
+  computePts2(numSides2, numLayers2);
+  
+  //meditation button
+   b1 = new Button(color (#355C7D), (width/2 + 380), (30), (50), (50), (width/2+380), (width/2+430), (30),(80));
+   
+  screen1 = 1;
+  currentScreen = screen1;
 }
 
 void draw() {
   background(#ffffff);
   
+   if (currentScreen == screen1) {
+      screen1();
+  }
   
+ //meditation mode button
+  translate(width/3 - 30, height/20 -10); 
+  rotate(-TWO_PI/numSides2 * .25);
   
-    // get the camera image
+  computePts2(numSides2, numLayers2);
+    
+    for (int i=1; i<numLayers2; i++) {
+      fill(#99e7ff, map(i, 1, numLayers2, 255, 100));
+      strokeWeight(0.5);
+      stroke(#ffffff);
+      beginShape(QUAD_STRIP);
+    for (int j=1; j<numSides2+1; j++) {
+      PVector p1 = pts2[i-1][j%numSides2];
+      PVector p2 = pts2[i][abs((j-i%2)%numSides2)];
+      PVector p3 = pts2[i][(j+1-i%2)%numSides2];
+      PVector p4 = pts2[(i+1)][j%numSides2];
+     
+      vertex(p1.x, p1.y);
+      vertex(p2.x, p2.y);
+      vertex(p3.x, p3.y);
+      vertex(p4.x, p4.y);
+    }
+    endShape();
+  }
+ }
+  
+void screen1() {
+  b1.display();
+  
+  // get the camera image
   opencv.loadImage(cam);
 
   // detect faces
@@ -71,7 +126,7 @@ void draw() {
   // draw input image
   image(opencv.getInput(), 0, 0);
 
-  // draw rectangles around detected faces
+   // draw rectangles around detected faces
   fill(255, 64);
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
@@ -87,30 +142,23 @@ void draw() {
     println("Frame rate:", round(frameRate), "fps");
     println("Number of faces:", faces.length);
   }
-  
-  
-  
-  
-  
-  translate(width/6, height/6); 
-  rotate(-TWO_PI/numSides * .25);
-
-  //breathe = map(sin(float(frameCount)/40*TWO_PI/10), -1, 1, .28, 1.2); //adjust speed here
+    //meditation mode
+    if (b1.IsClicked()==true) {
+    translate(width/6, height/6);
+    rotate(-TWO_PI/numSides * .25);
     breathe = map(sin(float(frameCount)/15*TWO_PI/10), -1, 1, .28, 1.2); //adjust speed here
-  
-  if (key == 'b') {
-  computePts(numSides, numLayers);
+    computePts(numSides, numLayers);
 
-  for (int i=1; i<numLayers; i++) {
-    fill(#99e7ff, map(i, 1, numLayers, 255, 100));
-    stroke(#ffffff);
-    beginShape(QUAD_STRIP);
+    for (int i=1; i<numLayers; i++) {
+      fill(#99e7ff, map(i, 1, numLayers, 255, 100));
+      stroke(#ffffff);
+      beginShape(QUAD_STRIP);
     for (int j=1; j<numSides+1; j++) {
       PVector p1 = pts[i-1][j%numSides];
       PVector p2 = pts[i][abs((j-i%2)%numSides)];
       PVector p3 = pts[i][(j+1-i%2)%numSides];
       PVector p4 = pts[(i+1)][j%numSides];
-     
+
       vertex(p1.x, p1.y);
       vertex(p2.x, p2.y);
       vertex(p3.x, p3.y);
@@ -118,9 +166,17 @@ void draw() {
     }
     endShape();
   }
+ } 
+}
+
+
+void keyPressed() {
+  if (key == '1') {
+    currentScreen = screen1;
   }
 }
 
+// meditation mode
 void computePts(int _numSides, int _numLayers) {
   pts = new PVector[_numLayers+1][_numSides];
 
@@ -136,18 +192,23 @@ void computePts(int _numSides, int _numLayers) {
   }
 }
 
+// meditation mode button
+void computePts2(int _numSides, int _numLayers) {
+  pts2 = new PVector[_numLayers+1][_numSides];
 
-void captureEvent(Capture c) {
-  c.read();
+  for (int i=0; i<_numLayers+1; i++) {
+    for (int j=0; j<_numSides; j++) {
+      float x, y, r, ang;
+      r = pow(float(i)/(_numLayers+1), breathe2) * width/50;
+      ang = TWO_PI / _numSides * (j + 0.5*(i%2)); //alternate rotation b/w layers
+      x = r * cos(ang);
+      y = r * sin(ang);
+      pts2[i][j] = new PVector(x, y);
+    }
+  }
 }
 
 
-void keyPressed() {
-  if (key=='s' && numSides<18) numSides++;  
-  if (key=='a' && numSides > 3) numSides--;
-  
-  if(key=='x' && numLayers < 25) numLayers++ ;
-  if(key=='z' && numLayers > 2) numLayers--;
-  
-  computePts(numSides, numLayers);
+void captureEvent(Capture c) {
+  c.read();
 }
