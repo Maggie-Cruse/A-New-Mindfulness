@@ -5,8 +5,10 @@ import java.awt.Rectangle;
 import netP5.*;
 import oscP5.*;
 
+
 Capture cam;
 OpenCV opencv;
+
 
 //Osc
 OscP5 osc;
@@ -31,77 +33,87 @@ int numLayers2 = 3;
 PVector[][] pts2;
 float breathe2 = .5;
 
-//class button
-Button b1; //meditation mode
+//class button - meditation mode
+Button b1; 
 
 // 2 integrated screen 'places'
 int currentScreen;
 int screen1;
+int screen2;
+
+boolean IsClicked = false;
 
 void setup() {
-  //size(600, 600);
   size(960, 720);
-  //size(640, 480);
   background(0);
-  
-  osc = new OscP5(this,12000);
+
+
+  osc = new OscP5(this, 12000);
   supercollider = new NetAddress("127.0.0.1", 57120);
-  
-  
+
+
   cam = new Capture(this, w, h);
   cam.start();
+
 
   // init OpenCV with input resolution
   opencv = new OpenCV(this, w, h);
 
   // setup for facial recognition
   opencv.loadCascade(OpenCV.CASCADE_FRONTALFACE);  
-  
+
   translate(width/2, height/2);
   fill(100);
   smooth();
 
   stroke(255);
-
   strokeWeight(2);
   strokeJoin(ROUND);
 
- //meditation mode
+  //meditation mode
   computePts(numSides, numLayers);
   //mediation mode button
   computePts2(numSides2, numLayers2);
-  
+
+
   //meditation button
-   b1 = new Button(color (#355C7D), (width/2 + 380), (30), (50), (50), (width/2+380), (width/2+430), (30),(80));
-   
+  b1 = new Button(color (#355C7D), (width/2 + 380), (30), (50), (50), (width/2+380), (width/2+430), (30), (80));
+
   screen1 = 1;
+  screen2 = 2;
   currentScreen = screen1;
 }
 
+
+
 void draw() {
   background(#ffffff);
-  
-   if (currentScreen == screen1) {
-      screen1();
+  //tint(0, 153, 204);  // Tint blue
+
+  if (currentScreen == screen1) {
+    screen1();
+  } else if (currentScreen == screen2) {
+  screen2();
   }
   
- //meditation mode button
+
+  //meditation mode button
   translate(width/3 - 30, height/20 -10); 
   rotate(-TWO_PI/numSides2 * .25);
-  
+
   computePts2(numSides2, numLayers2);
-    
-    for (int i=1; i<numLayers2; i++) {
-      fill(#99e7ff, map(i, 1, numLayers2, 255, 100));
-      strokeWeight(0.5);
-      stroke(#ffffff);
-      beginShape(QUAD_STRIP);
+
+  for (int i=1; i<numLayers2; i++) {
+    fill(#99e7ff, map(i, 1, numLayers2, 255, 100));
+    strokeWeight(0.5);
+    stroke(#ffffff);
+    beginShape(QUAD_STRIP);
     for (int j=1; j<numSides2+1; j++) {
       PVector p1 = pts2[i-1][j%numSides2];
       PVector p2 = pts2[i][abs((j-i%2)%numSides2)];
       PVector p3 = pts2[i][(j+1-i%2)%numSides2];
       PVector p4 = pts2[(i+1)][j%numSides2];
-     
+
       vertex(p1.x, p1.y);
       vertex(p2.x, p2.y);
       vertex(p3.x, p3.y);
@@ -109,11 +121,19 @@ void draw() {
     }
     endShape();
   }
- }
+    
+    if (b1.IsClicked()==true) {
+      currentScreen = screen2;
+    }
   
+  keyPressed();
+}
+
+
+
 void screen1() {
   b1.display();
-  
+
   // get the camera image
   opencv.loadImage(cam);
 
@@ -126,7 +146,7 @@ void screen1() {
   // draw input image
   image(opencv.getInput(), 0, 0);
 
-   // draw rectangles around detected faces
+  // draw rectangles around detected faces
   fill(255, 64);
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
@@ -134,7 +154,7 @@ void screen1() {
     OscMessage myOsc = new OscMessage("/move");
     myOsc.add(faces[i].x);
     myOsc.add(faces[i].y);
-    osc.send(myOsc,supercollider);
+    osc.send(myOsc, supercollider);
   }
 
   // show performance and number of detected faces on the console
@@ -142,8 +162,40 @@ void screen1() {
     println("Frame rate:", round(frameRate), "fps");
     println("Number of faces:", faces.length);
   }
-    //meditation mode
-    if (b1.IsClicked()==true) {
+  b1.click = false;
+}
+
+void screen2() {
+    b1.click = false;
+  // get the camera image
+  opencv.loadImage(cam);
+
+  // detect faces
+  Rectangle[] faces = opencv.detect();
+
+  // zoom to input resolution
+  scale(zoom);
+
+  // draw input image
+  image(opencv.getInput(), 0, 0);
+
+  // draw rectangles around detected faces
+  fill(255, 64);
+  strokeWeight(3);
+  for (int i = 0; i < faces.length; i++) {
+    rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+    OscMessage myOsc = new OscMessage("/move");
+    myOsc.add(faces[i].x);
+    myOsc.add(faces[i].y);
+    osc.send(myOsc, supercollider);
+  }
+
+  // show performance and number of detected faces on the console
+  if (frameCount % 50 == 0) {
+    println("Frame rate:", round(frameRate), "fps");
+    println("Number of faces:", faces.length);
+  }
+  //meditation mode
     translate(width/6, height/6);
     rotate(-TWO_PI/numSides * .25);
     breathe = map(sin(float(frameCount)/15*TWO_PI/10), -1, 1, .28, 1.2); //adjust speed here
@@ -153,26 +205,27 @@ void screen1() {
       fill(#99e7ff, map(i, 1, numLayers, 255, 100));
       stroke(#ffffff);
       beginShape(QUAD_STRIP);
-    for (int j=1; j<numSides+1; j++) {
-      PVector p1 = pts[i-1][j%numSides];
-      PVector p2 = pts[i][abs((j-i%2)%numSides)];
-      PVector p3 = pts[i][(j+1-i%2)%numSides];
-      PVector p4 = pts[(i+1)][j%numSides];
+      for (int j=1; j<numSides+1; j++) {
+        PVector p1 = pts[i-1][j%numSides];
+        PVector p2 = pts[i][abs((j-i%2)%numSides)];
+        PVector p3 = pts[i][(j+1-i%2)%numSides];
+        PVector p4 = pts[(i+1)][j%numSides];
 
-      vertex(p1.x, p1.y);
-      vertex(p2.x, p2.y);
-      vertex(p3.x, p3.y);
-      vertex(p4.x, p4.y);
+        vertex(p1.x, p1.y);
+        vertex(p2.x, p2.y);
+        vertex(p3.x, p3.y);
+        vertex(p4.x, p4.y);
+      }
+      endShape();
     }
-    endShape();
-  }
- } 
 }
 
 
 void keyPressed() {
   if (key == '1') {
     currentScreen = screen1;
+  } else if (key == '2') {
+    currentScreen = screen2;
   }
 }
 
@@ -207,7 +260,6 @@ void computePts2(int _numSides, int _numLayers) {
     }
   }
 }
-
 
 void captureEvent(Capture c) {
   c.read();
