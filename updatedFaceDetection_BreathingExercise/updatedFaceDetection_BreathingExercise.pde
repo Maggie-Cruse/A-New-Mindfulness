@@ -96,7 +96,6 @@ void draw() {
   screen2();
   }
   
-
   //meditation mode button
   translate(width/3 - 30, height/20 -10); 
   rotate(-TWO_PI/numSides2 * .25);
@@ -153,7 +152,7 @@ void screen1() {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
     OscMessage myOsc = new OscMessage("/movedis");
     myOsc.add(faces[i].x);
-    myOsc.add(0.05);
+    myOsc.add(1);
     myOsc.add(0);
     myOsc.add(0);
     osc.send(myOsc, supercollider);
@@ -168,14 +167,8 @@ void screen1() {
 }
 
 
-
-
-
 void screen2() {
     b1.click = false;
-    
-    
-    
   // get the camera image
   opencv.loadImage(cam);
 
@@ -197,7 +190,7 @@ void screen2() {
     myOsc.add(0);
     myOsc.add(0);
     myOsc.add(faces[i].x);
-    myOsc.add(1);
+    myOsc.add(0.02);
     osc.send(myOsc, supercollider);
   }
 
