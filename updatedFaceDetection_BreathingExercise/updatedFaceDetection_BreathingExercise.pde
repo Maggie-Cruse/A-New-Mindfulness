@@ -152,7 +152,8 @@ void screen1() {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
     OscMessage myOsc = new OscMessage("/movedis");
     myOsc.add(faces[i].x);
-    myOsc.add(1);
+    myOsc.add(faces[i].y);
+    myOsc.add(.05);
     myOsc.add(0);
     myOsc.add(0);
     osc.send(myOsc, supercollider);
@@ -189,8 +190,9 @@ void screen2() {
     OscMessage myOsc = new OscMessage("/movedis");
     myOsc.add(0);
     myOsc.add(0);
+    myOsc.add(0);
     myOsc.add(faces[i].x);
-    myOsc.add(0.02);
+    myOsc.add(0.5);
     osc.send(myOsc, supercollider);
   }
 
