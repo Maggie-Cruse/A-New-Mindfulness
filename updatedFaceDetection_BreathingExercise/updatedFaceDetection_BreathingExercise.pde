@@ -133,7 +133,7 @@ void draw() {
 
 void screen1() {
   b1.display();
-
+  
   // get the camera image
   opencv.loadImage(cam);
 
@@ -151,9 +151,11 @@ void screen1() {
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-    OscMessage myOsc = new OscMessage("/move");
+    OscMessage myOsc = new OscMessage("/movedis");
     myOsc.add(faces[i].x);
-    myOsc.add(faces[i].y);
+    myOsc.add(0.05);
+    myOsc.add(0);
+    myOsc.add(0);
     osc.send(myOsc, supercollider);
   }
 
@@ -165,8 +167,15 @@ void screen1() {
   b1.click = false;
 }
 
+
+
+
+
 void screen2() {
     b1.click = false;
+    
+    
+    
   // get the camera image
   opencv.loadImage(cam);
 
@@ -184,9 +193,11 @@ void screen2() {
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-    OscMessage myOsc = new OscMessage("/move");
+    OscMessage myOsc = new OscMessage("/movedis");
+    myOsc.add(0);
+    myOsc.add(0);
     myOsc.add(faces[i].x);
-    myOsc.add(faces[i].y);
+    myOsc.add(1);
     osc.send(myOsc, supercollider);
   }
 
