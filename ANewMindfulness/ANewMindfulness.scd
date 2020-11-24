@@ -78,7 +78,7 @@ SynthDef(\chaos, {
 SynthDef(\center, {
 	arg freq = 100, amp = 1, xpos =0;
 	var sig;
-	sig = Pan2.ar(SinOsc.ar(freq,0,amp),xpos);
+	sig = Pan2.ar(SinOsc.ar(freq+528,0,amp),xpos);
 	Out.ar([0],sig);
 }).add;
 )
