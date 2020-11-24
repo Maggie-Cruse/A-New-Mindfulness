@@ -203,7 +203,7 @@ void screen2() {
     myOsc.add(0);
     myOsc.add(0);
     myOsc.add(faces[i].x);
-    myOsc.add(1);
+    myOsc.add(0.08);
     osc.send(myOsc, supercollider);
   }
 
