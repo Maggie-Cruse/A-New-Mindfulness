@@ -16,7 +16,7 @@ import java.awt.Rectangle;
 import netP5.*;
 import oscP5.*;
 
-
+//Use webacm
 Capture cam;
 OpenCV opencv;
 
@@ -161,11 +161,13 @@ void screen1() {
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
+    
+    //sending values to supercollider for screen 1
     OscMessage myOsc = new OscMessage("/mindfulness");
-    myOsc.add(faces[i].x);
-    myOsc.add(faces[i].y);
-    myOsc.add(.05);
-    myOsc.add(0);
+    myOsc.add(faces[i].x); //send x value
+    myOsc.add(faces[i].y); //send y value
+    myOsc.add(.05); //send amplitude to turn on synth 1
+    myOsc.add(0); //zeroes to silence screen 2 synth
     myOsc.add(0);
     osc.send(myOsc, supercollider);
   }
@@ -198,12 +200,14 @@ void screen2() {
   strokeWeight(3);
   for (int i = 0; i < faces.length; i++) {
     rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height);
-    OscMessage myOsc = new OscMessage("/mindfulness");
+    
+    //send values to supercollider for screen 2
+    OscMessage myOsc = new OscMessage("/mindfulness"); 
+    myOsc.add(0); //zeroes to silence screen 1 synth
     myOsc.add(0);
     myOsc.add(0);
-    myOsc.add(0);
-    myOsc.add(faces[i].x);
-    myOsc.add(0.08);
+    myOsc.add(faces[i].x); //send x value
+    myOsc.add(0.08); //send amplitude to turn on synth 2
     osc.send(myOsc, supercollider);
   }
 
