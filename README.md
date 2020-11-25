@@ -1,5 +1,5 @@
 # A New Mindfulness
-Aesthetics and Computation final project repository for group 2
+CRCP 2020 Showcase
 
 Download the contents within "A New Mindfulness" folder (SuperCollider patch -ANewMindfulness.scd- as well as a Processing sketch folder -Room_Of_Zen)
 
