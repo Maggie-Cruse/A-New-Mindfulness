@@ -2,6 +2,7 @@
 CRCP 2020 Showcase
 
 Watch a demonstration of our project here:
+
 https://vimeo.com/483793807
 
 Instructions:
@@ -13,6 +14,7 @@ Instructions:
 3. Next, open and run the Processing sketch
 
 Artist Statement:
+
 This instrument revolves around mentally and figuratively centering oneself. When a user’s face is detected, a rectangle appears and overlays it. The position of the rectangle on screen (AKA the position and movement of the user’s face) is sonified. If their face is centered on the screen, then the sound will be a soft, low tone. As their face gets closer to the edges of the screen, then the sound becomes higher, as if in warning to urge the user to return to center. 
 
 This instrument can be a pertinent tool for the times we are in. Amidst a global pandemic, education and work must primarily be achieved remotely. More so than ever, computers and video-conferencing platforms are crucial as sources of human connection. With the current shift to online communication, anyone, anywhere, at any time is now accessible. The one requirement is being within frame of a webcam. 
