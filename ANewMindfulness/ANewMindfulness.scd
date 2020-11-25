@@ -53,7 +53,7 @@ SynthDef(\chaos, {
 	var sig;
 	//two option of ugen for screen 1
 	sig = Blip.ar([freq,freq2],10,amp);
-/*	sig = SinOsc.ar([freq,freq2],0, amp);*/
+	//sig = SinOsc.ar([freq,freq2],0, amp);
 	Out.ar(0,sig);
 }).add;
 )
@@ -78,7 +78,7 @@ SynthDef(\chaos, {
 SynthDef(\center, {
 	arg freq = 100, amp = 1, xpos =0;
 	var sig;
-	sig = Pan2.ar(SinOsc.ar(freq+528,0,amp),xpos);
+	sig = Pan2.ar(SinOsc.ar(freq+528,0,amp),xpos); //adding 528 makes the base sound the "miracle note" in the center of the screen
 	Out.ar([0],sig);
 }).add;
 )
@@ -91,27 +91,28 @@ f = Synth(\center, [\amp,0]);
 (
 OSCdef('facelistener', {
 	arg myOsc;
-	var pos1 = (myOsc[1]-160)/160;
-	var pos2 = (myOsc[4]-160)/160;
+	
+	var pos2 = (myOsc[4]-160)/160; 
+	// ^ turns the screen coordinates to range from -1 to 1 for spacialized sound, along X-axis
+	
 	var makeMiddle = myOsc[4] - 160;
-
 	if(makeMiddle < 0,
 		{makeMiddle = makeMiddle*(-1)}
 	);
-	postln(makeMiddle);
-	postln(myOsc);
+	//similar to pos2, moves the range of the frequency so that 0 is the center on the A axis, before affected by the synthDef
+	//the if statement checks if it is negative and makes it positive because you can't have a negative frequency
 
    //screen 1
 	d.set(
-		\freq, myOsc[1],
-		\freq2, myOsc[2],
+		\freq, myOsc[1], //sets frequency for the left ear, based on X position
+		\freq2, myOsc[2], //sets frequency for right ear, based on Y position
 		\amp, myOsc[3],
-		\xpos, pos1
 	);
+	
 	//screen 2
 	f.set(
-		\amp,myOsc[5],
 		\freq,makeMiddle,
+		\amp,myOsc[5],
 		\xpos,pos2
 	);
 
