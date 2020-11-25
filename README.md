@@ -1,7 +1,7 @@
 # A New Mindfulness
 CRCP 2020 Showcase
 
-Download the contents within "A New Mindfulness" folder (SuperCollider patch -ANewMindfulness.scd- as well as a Processing sketch folder -Room_Of_Zen)
+Download the contents within "A New Mindfulness" folder (SuperCollider patch -ANewMindfulness.scd- as well as a Processing sketch folder -Room_Of_Zen) 
 
 This instrument revolves around mentally and figuratively centering oneself. When a user’s face is detected, a rectangle appears and overlays it. The position of the rectangle on screen (AKA the position and movement of the user’s face) is sonified. If their face is centered on the screen, then the sound will be a soft, low tone. As their face gets closer to the edges of the screen, then the sound becomes higher, as if in warning to urge the user to return to center. 
 
