@@ -7,17 +7,9 @@
 //Instructions
 /* First run "waves," the two SynthDefs, as well as the OSCdef before navigating to the Processing sketch (titled "Room of Zen"). Run the processing sketch and hear the sound produced via facial recognition data. To enter meditation mode, click on the blue icon in the upper lefthand side of the sketch.In sync with the movement of shapes, inhale and exhale while hearing the healing frequencies now being produced. To exit meditation mode, press '1' on your keyboard. Press '2' on your keyboard to once again enter meditiation mode when desired.*/
 
-/*
-           _.====.._
-         ,:._       ~-_
-             `\        ~-_
-               |         `.
-             ,/              ~-_
-    -..__..-''                ~~--..__...----...
-*/
 
 
-//Run waves first
+//Run waves
 (
 ~waves = {
 	var noise = { WhiteNoise.ar(0.04 + LFNoise1.kr(0.3, 0.03)) };
@@ -32,20 +24,8 @@
 )
 
 
- /*               .----.
-      .---------. | == |
-      |.-"""""-.| |----|
-      || !!!!! || | == |
-      ||       || |----|
-      |'-.....-'| |::::|
-      `"")---(""` |___.|
-     /:::::::::::\" _  "
-    /:::=======:::\`\`\
-   `"""""""""""""`  '-'
-*/
 
-
-//Run both screen SynthDefs
+//Run chaos SynthDef
 //screen 1
 (
 SynthDef(\chaos, {
@@ -58,21 +38,7 @@ SynthDef(\chaos, {
 }).add;
 )
 
-/*
-     ."".    ."",
-     |  |   /  /
-     |  |  /  /
-     |  | /  /
-     |  |/  ;-._
-     }  ` _/  / ;
-     |  /` ) /  /
-     | /  /_/\_/\
-     |/  /      |
-     (  ' \ '-  |
-      \    `.  /
-       |      |
-       |      |
-*/
+//Run center SynthDef
 //screen 2 - meditation mode
 (
 SynthDef(\center, {
