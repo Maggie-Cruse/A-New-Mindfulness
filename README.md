@@ -9,7 +9,7 @@ https://vimeo.com/483793807
 Instructions:
 1. Download the contents within "A New Mindfulness" folder. This includes:
    - a SuperCollider patch titled "ANewMindfulness"
-   - a Processing sketch folder titled "Room_Of_Zen"
+   - a Processing sketch titled "Room_Of_Zen"
 
 2. Open the SuperCollider patch and run each block of code according to instructional comments
 3. Next, open and run the Processing sketch
