@@ -223,7 +223,7 @@ void screen2() {
     computePts(numSides, numLayers);
 
     for (int i=1; i<numLayers; i++) {
-      fill(#99e7ff, map(i, 1, numLayers, 255, 100));
+      fill(#99e7ff, map(i, 1, numLayers, 255, 100), 255, 120);
       stroke(#ffffff);
       beginShape(QUAD_STRIP);
       for (int j=1; j<numSides+1; j++) {
