@@ -3,7 +3,7 @@ CRCP 2020 Showcase
 
 Watch a demonstration of our project here:
 
-https://vimeo.com/483793807
+https://vimeo.com/484605744
 
 
 Instructions:
